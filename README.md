@@ -1,1 +1,1 @@
-# GCP-terraform-practice
+# terraform-practice
