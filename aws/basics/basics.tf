@@ -16,7 +16,6 @@ provider "aws" {
 }
 
 // Create a resource
-/* 
 resource "aws_instance" "tf-ec2-t1" {
   ami           = "ami-00db8dadb36c9815e"
   instance_type = "t2.micro"
@@ -24,7 +23,6 @@ resource "aws_instance" "tf-ec2-t1" {
     origin = "tf"
   }
 } 
-*/
 
 resource "aws_vpc" "tf-vpc-v1" {
   cidr_block = "10.0.0.0/16"
