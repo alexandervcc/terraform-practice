@@ -24,6 +24,9 @@ resource "aws_vpc" "tf-vpc-v2" {
 
 resource "aws_internet_gateway" "tf-internet-gateway-v2" {
   vpc_id = aws_vpc.tf-vpc-v2.id
+  tags = {
+    name = "v2"
+  }
 }
 
 resource "aws_route_table" "tf-route-table-v2" {
@@ -33,6 +36,9 @@ resource "aws_route_table" "tf-route-table-v2" {
     cidr_block = "0.0.0.0/0"
     gateway_id = aws_internet_gateway.tf-internet-gateway-v2.id
   }
+  tags = {
+    name = "v2"
+  }
 }
 
 resource "aws_subnet" "tf-subnet-v2" {
@@ -40,18 +46,24 @@ resource "aws_subnet" "tf-subnet-v2" {
   cidr_block = "10.0.1.0/24"
 
   availability_zone = "us-east-2a"
+  tags = {
+    name = "v2"
+  }
 }
 
 
 // Associate subnet with route table
 resource "aws_route_table_association" "tf-subnet--route-table--v2" {
-  route_table_id = aws_subnet.tf-subnet-v2.id
+  route_table_id = aws_route_table.tf-route-table-v2.id
   subnet_id      = aws_subnet.tf-subnet-v2.id
 }
 
 resource "aws_security_group" "tf-security-group--web-traffic" {
   vpc_id = aws_vpc.tf-vpc-v2.id
   name   = "Allow web traffic"
+  tags = {
+    name = "v2"
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "tf-sg-rule--https" {
@@ -60,6 +72,9 @@ resource "aws_vpc_security_group_ingress_rule" "tf-sg-rule--https" {
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 443
   to_port           = 443
+  tags = {
+    name = "v2"
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "tf-sg-rule--http" {
@@ -68,14 +83,20 @@ resource "aws_vpc_security_group_ingress_rule" "tf-sg-rule--http" {
   cidr_ipv4         = "0.0.0.0/0"
   from_port         = 80
   to_port           = 80
+  tags = {
+    name = "v2"
+  }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "tf-sg-rule--ssh" {
   security_group_id = aws_security_group.tf-security-group--web-traffic.id
   ip_protocol       = "tcp"
   cidr_ipv4         = "0.0.0.0/0"
-  from_port         = 2
-  to_port           = 2
+  from_port         = 22
+  to_port           = 22
+  tags = {
+    name = "v2"
+  }
 }
 
 resource "aws_vpc_security_group_egress_rule" "tf-sg-rule--out" {
@@ -83,23 +104,32 @@ resource "aws_vpc_security_group_egress_rule" "tf-sg-rule--out" {
   cidr_ipv4         = "0.0.0.0/0"
   # semantically equivalent to all ports
   ip_protocol = "-1"
+  tags = {
+    name = "v2"
+  }
 }
 
 // Assign a private IP
 resource "aws_network_interface" "tf-network-interface--v2" {
   subnet_id       = aws_subnet.tf-subnet-v2.id
-  private_ip      = "10.0.1.50"
+  private_ips     = ["10.0.1.50"]
   security_groups = [aws_security_group.tf-security-group--web-traffic.id]
+  tags = {
+    name = "v2"
+  }
 }
 
 // Elastic IP for EC2 instance
 resource "aws_eip" "tf-elastic-ip--v2" {
   network_interface         = aws_network_interface.tf-network-interface--v2.id
   associate_with_private_ip = "10.0.1.50"
-  depends_on                = [aws_internet_gateway.tf-internet-gateway-v2]
+  depends_on                = [aws_internet_gateway.tf-internet-gateway-v2, aws_instance.tf-ec2-instance1--v2]
+  tags = {
+    name = "v2"
+  }
 }
 
-resource "aws_instance" "tf-ec2-instance--v2" {
+resource "aws_instance" "tf-ec2-instance1--v2" {
   ami               = "ami-00db8dadb36c9815e"
   instance_type     = "t2.micro"
   availability_zone = "us-east-2a"
@@ -112,12 +142,16 @@ resource "aws_instance" "tf-ec2-instance--v2" {
 
   // commands for instance
   user_data = <<-EOF
-                #!/bin/bash
-                sudo apt updat e-y
-                sudo apt install apache2 -y
-                sudo systemctl start apache2
-                sudo bash -c 'Terraform Test > /var/www/html/index.html'
-                EOF
+                 !/bin/bash
+                 sudo apt update -y
+                 sudo apt install apache2 -y
+                 sudo systemctl start apache2
+                 sudo bash -c 'echo your very first web server > /var/www/html/index.html'
+                 EOF
+
+  tags = {
+    name = "v2"
+  }
 
 }
 
