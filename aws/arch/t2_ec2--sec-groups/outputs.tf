@@ -14,7 +14,7 @@ output "intance_public_dns" {
 
 # List
 output "for-list-instances" {
-  value       = [for instance in aws_instance.ec2_http_server : instance.public_dns]
+  value = [for instance in aws_instance.ec2_http_server : instance.public_dns]
 }
 
 # Map 
@@ -25,11 +25,16 @@ output "for-map-instaces" {
 }
 
 output "for-map-advanced-instances" {
+  # count: index => number
+  # for_each: index => key/value of index
+
   value = {
     for index, instance in aws_instance.ec2_http_server : index => instance.public_dns
   }
 }
 
 output "for-splat-operator-instances" {
-  value = aws_instance.ec2_http_server[*].public_dns
+  # Splat operator does only work for `count`, but not `for_each`
+  # value = aws_instance.ec2_http_server[*].public_dns
+  value = "default for `for_each`"
 }

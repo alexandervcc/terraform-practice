@@ -24,6 +24,6 @@ resource "aws_instance" "ec2_http_server" {
 
   tags = {
     # NameCount   = "Count-${count.index}",
-    NameForEach = "For-Each-${each.key}"
+    Name = "For-Each-${each.key}"
   }
 }
