@@ -16,9 +16,14 @@ resource "aws_instance" "ec2_http_server" {
   ]
 
   # count: create x instances of this resource
-  count = 2
+  # count = 2
+
+  # Create an instance on differente Availability zones
+  for_each          = toset(data.aws_availability_zones.my-azones.names)
+  availability_zone = each.key
 
   tags = {
-    Name = "Count-${count.index}"
+    # NameCount   = "Count-${count.index}",
+    NameForEach = "For-Each-${each.key}"
   }
 }
