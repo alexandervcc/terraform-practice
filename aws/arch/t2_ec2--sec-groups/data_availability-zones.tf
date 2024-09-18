@@ -4,3 +4,4 @@ data "aws_availability_zones" "my-azones" {
     values = ["opt-in-not-required"]
   }
 }
+

@@ -1,5 +1,5 @@
 data "aws_ec2_instance_type_offerings" "my-instance-types" {
-  for_each = toset(["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1e", "us-east-1f"])
+  for_each = toset(data.aws_availability_zones.my-azones.names)
 
   location_type = "availability-zone"
 
@@ -18,3 +18,11 @@ data "aws_ec2_instance_type_offerings" "my-instance-types" {
 output "instance--us-east-1" {
   value = { for az, type in data.aws_ec2_instance_type_offerings.my-instance-types : az => type.instance_types }
 }
+
+output "supported-azones-by-instance-type" {
+  value = keys({
+    for az, details in data.aws_ec2_instance_type_offerings.my-instance-types :
+    az => details.instance_types if length(details.instance_types) != 0
+  })
+}
+
