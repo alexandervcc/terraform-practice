@@ -1,7 +1,7 @@
 variable "aws_region" {
   description = "AWS region allocate resources."
   type        = string
-  default     = "us-east-2"
+  default     = "us-east-1"
 }
 
 variable "instance_type" {
@@ -13,14 +13,14 @@ variable "instance_type" {
 variable "instance_key_pair" {
   description = "EC2 key pair"
   type        = string
-  default     = "terraform-keys"
+  default     = "terraform-keys-1"
 }
 
 # Instance type list
 variable "instance_type_list" {
   description = "EC2 instance type list"
   type        = list(string)
-  default     = ["t2.micro", "t2.micro"]
+  default     = ["t3.micro", "t3.micro"]
 }
 
 # Instance type map
@@ -28,8 +28,8 @@ variable "instance_type_map" {
   description = "EC2 instance type map"
   type        = map(string)
   default = {
-    qa  = "t2.micro",
-    dev = "t2.micro",
-    prod  = "t2.micro"
+    qa  = "t3.micro",
+    dev = "t3.micro",
+    prod  = "t3.micro"
   }
 }
