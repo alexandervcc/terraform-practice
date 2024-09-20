@@ -2,7 +2,7 @@ module "aws-vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
 
-  name = "t3-vpc"
+  name = local.vpc-name
   cidr = "10.0.0.0/16"
 
   azs             = var.azs
@@ -24,7 +24,7 @@ module "aws-vpc" {
 
 
   vpc_tags = {
-    Name = "dev"
+    Name = local.vpc-name
   }
   public_subnet_tags = {
     Name = "public-subnet"
