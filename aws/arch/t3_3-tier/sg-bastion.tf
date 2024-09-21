@@ -5,7 +5,7 @@ module "sg-public-bastion" {
   name        = var.sg-bastion-name
   description = var.sg-bastion-description
 
-  vpc_id = module.aws-vpc.vpc-id
+  vpc_id = module.aws-vpc.vpc_id
 
   ingress_rules       = ["ssh-tcp"]
   ingress_cidr_blocks = ["0.0.0.0/0"]
