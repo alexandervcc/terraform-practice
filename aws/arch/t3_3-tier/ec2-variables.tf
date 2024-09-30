@@ -5,7 +5,7 @@ variable "instance-type" {
 
 variable "instance-keypair" {
   type    = string
-  default = "terraform-key-1"
+  default = "terraform-keys-1"
 }
 
 variable "private-instance-count" {

@@ -27,10 +27,12 @@ resource "null_resource" "null" {
     on_failure  = continue
   }
 
+  /*
   provisioner "local-exec" {
     command     = "echo EC2 instance destroyed `date` >> xd-file-destroy.txt"
     working_dir = "output/"
     when = destroy
   }
+  */
 }
 
