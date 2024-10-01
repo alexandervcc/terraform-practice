@@ -1,1 +1,2 @@
 EC2 instance created `date` on VPC vpc-02d5xxxxxxc1e7a 
+EC2 instance created `date` on VPC vpc-0206xxxxxx0c87d 

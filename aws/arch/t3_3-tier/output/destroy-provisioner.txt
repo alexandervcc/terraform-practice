@@ -1,1 +1,2 @@
 VPC instance destroyed `date` 
+VPC instance destroyed `date` 
